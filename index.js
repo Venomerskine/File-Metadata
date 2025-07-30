@@ -1,17 +1,25 @@
 var express = require('express');
 var cors = require('cors');
+const bodyparser = require('body-parser');
+const multer = require('multer');
 require('dotenv').config()
+
+const upload = multer({ dest: 'uploads/' });
 
 var app = express();
 
 app.use(cors());
+app.use(bodyparser.urlencoded({ extended: true }));
 app.use('/public', express.static(process.cwd() + '/public'));
 
 app.get('/', function (req, res) {
   res.sendFile(process.cwd() + '/views/index.html');
 });
 
-
+app.post('/api/fileanalyse', upload.single('file'), (req, res) => {
+  console.log(req.body);
+ res.json({success: true})
+})
 
 
 const port = process.env.PORT || 3000;
